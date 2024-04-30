@@ -22,17 +22,17 @@ def feed_forward(x, w1, w2, b1, b2):
 node_size = {'input_layer_size': 3, 'hidden_layer_size': 3, 'output_layer_size': 1}
 
 # 가중치와 바이어스 초기화
-w1 = np.random.rand(node_size['hidden_layer_size'], node_size['input_layer_size'])
-w2 = np.random.rand(node_size['output_layer_size'], node_size['hidden_layer_size'])
-b1 = np.random.rand(node_size['hidden_layer_size'])
-b2 = np.random.rand(node_size['output_layer_size'])
+w1 = np.random.random((node_size['hidden_layer_size'], node_size['input_layer_size']))
+w2 = np.random.random((node_size['output_layer_size'], node_size['hidden_layer_size']))
+b1 = np.random.random(node_size['hidden_layer_size'])
+b2 = np.random.random(node_size['output_layer_size'])
 
 # 학습률
 learning_rate = 2.0
 
 # 입력 데이터 X와 목표 데이터 Y
 X = np.array([[1,0,0], [0,0,1], [0,1,1], [1,0,1], [1,1,0], [0,1,0], [1,1,1]])
-Y = np.array([[1, 0, 0, 0, 1, 1, 0]])
+Y = np.array([1, 0, 0, 0, 1, 1, 0])
 
 count = 0
 # 최대 반복 횟수
@@ -56,18 +56,18 @@ while count < max_iteration:
         
         # 역전파 단계
         delta3 = -(y - a3) * sigmoid_derivative(z3)
-        average_cost += np.linalg.norm((y - a3))/dataset_size
+        average_cost += np.linalg.norm((y - a3), 2)/dataset_size
         delta2 = np.dot(w2.T, delta3) * sigmoid_derivative(z2)
 
         dw2 += np.dot(delta3[:, np.newaxis], np.transpose(a2[:, np.newaxis]))/dataset_size
         db2 += delta3/dataset_size
         dw1 += np.dot(delta2[:, np.newaxis], np.transpose(a1[:, np.newaxis]))/dataset_size
         db1 += delta2/dataset_size
+       
         # 가중치 업데이트
+        # 바이어스 업데이트
         w1 -= learning_rate * dw1
         w2 -= learning_rate * dw2
-
-        # 바이어스 업데이트
         b1 -= learning_rate * db1
         b2 -= learning_rate * db2
         
